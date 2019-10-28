@@ -142,7 +142,7 @@ Serializer.addClass(
     { name: "size:number", default: 25 },
     { name: "maxLength:number", default: -1 },
     { name: "placeHolder", serializationProperty: "locPlaceHolder" },
-    { name: "dateSeparator", default: "/" },
+    { name: "dateSeparator", default: "" },
     { name: "shortDateFormat", default: "" },
     { name: "longDateFormat", default: "" }
   ],
