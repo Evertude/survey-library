@@ -95,5 +95,8 @@
     "hooks": {
       "pre-push": "npm run testsingle"
     }
+  },
+  "dependencies": {
+    "text-mask-core": "^5.1.2"
   }
 }

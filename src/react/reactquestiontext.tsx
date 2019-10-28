@@ -4,8 +4,10 @@ import { Base } from "../base";
 import { SurveyQuestionElementBase } from "./reactquestionelement";
 import { QuestionTextModel } from "../question_text";
 import { ReactQuestionFactory } from "./reactquestionfactory";
+import * as TextMask from "text-mask-core";
 
 export class SurveyQuestionText extends SurveyQuestionElementBase {
+  textMaskInputElement: any;
   constructor(props: any) {
     super(props);
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -15,11 +17,50 @@ export class SurveyQuestionText extends SurveyQuestionElementBase {
     return this.questionBase as QuestionTextModel;
   }
   handleOnChange(event: any) {
+    this.textMaskInputElement.update();
     this.setState({ value: this.getValue(event.target.value) });
   }
   handleOnBlur(event: any) {
     this.question.value = event.target.value;
     this.setState({ value: this.getValue(this.question.value) });
+  }
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    var el: any = this.refs["input"];
+    if (!!el) {
+      el.removeAttribute("data-input-rendered");
+    }
+  }
+  componentDidMount() {
+    super.componentDidMount();
+    this.afterRender();
+  }
+  componentDidUpdate(prevProps: any, prevState: any) {
+    super.componentDidUpdate(prevProps, prevState);
+    this.afterRender();
+  }
+  private afterRender() {
+    if (this.question) {
+      var el: any = this.refs["input"];
+      if (
+        el &&
+        this.question.survey &&
+        el.getAttribute("data-input-rendered") !== "r"
+      ) {
+        el.setAttribute("data-input-rendered", "r");
+        //
+        //if(this.question.inputType === "date") {
+          this.textMaskInputElement = TextMask.createTextMaskInputElement({
+            inputElement: el,
+            showMask: true,
+            mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+            //keepCharPositions: true,
+            //placeholderChar: '\u2000'
+          });
+          this.textMaskInputElement.update(this.question.value);
+        //}
+      }
+    }
   }
   render(): JSX.Element {
     if (!this.question) return null;
@@ -30,6 +71,7 @@ export class SurveyQuestionText extends SurveyQuestionElementBase {
         : this.getValue(this.question.value);
     return (
       <input
+        ref="input"
         id={this.question.inputId}
         disabled={this.isDisplayMode}
         className={cssClasses.root}

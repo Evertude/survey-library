@@ -95,6 +95,25 @@ export class QuestionTextModel extends Question {
     }
     return newValue;
   }
+  public get dateSeparator(): string {
+    return this.getLocalizableStringText("dateSeparator");
+  }
+  public set dateSeparator(val: string) {
+    this.setLocalizableStringText("dateSeparator", val);
+  }
+  public get shortDateFormat(): string {
+    return this.getLocalizableStringText("shortDateFormat");
+  }
+  public set shortDateFormat(val: string) {
+    this.setLocalizableStringText("shortDateFormat", val);
+  }
+  public get longDateFormat(): string {
+    return this.getLocalizableStringText("longDateFormat");
+  }
+  public set longDateFormat(val: string) {
+    this.setLocalizableStringText("longDateFormat", val);
+  }
+
 }
 
 Serializer.addClass(
@@ -122,7 +141,10 @@ Serializer.addClass(
     },
     { name: "size:number", default: 25 },
     { name: "maxLength:number", default: -1 },
-    { name: "placeHolder", serializationProperty: "locPlaceHolder" }
+    { name: "placeHolder", serializationProperty: "locPlaceHolder" },
+    { name: "dateSeparator", default: "/" },
+    { name: "shortDateFormat", default: "" },
+    { name: "longDateFormat", default: "" }
   ],
   function() {
     return new QuestionTextModel("");
